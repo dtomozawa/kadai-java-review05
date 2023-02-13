@@ -10,27 +10,28 @@ import java.util.Scanner;
 
 public class Review05 {
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);
         Connection con = null;
+        PreparedStatement ps = null;    // 更新前、更新後の検索用プリペアードステートメントオブジェクト
         System.out.print("検索キーワードを入力してください > ");
-        String input = sc.nextLine();
-        int id = Integer.parseInt(input);
+        int id = keyInNum();
 
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost/world?useSSL=false&allowPublicKeyRetrieval=true",
+            con = DriverManager.getConnection("jdbc:mysql://localhost/kadaidb?useSSL=false&allowPublicKeyRetrieval=true",
                     "root", "daisuke335579");
-            PreparedStatement ps = con.prepareStatement("SELECT name, age FROM person WHERE id = ?");
-            ps.setInt(1, id);
+            String Sql = "SELECT name, age FROM person WHERE id = ?";
+            ps = con.prepareStatement(Sql);
+            ps.setInt(1, id); 
+            ResultSet rs = ps.executeQuery();
+        
 
-            try (ResultSet rs = ps.executeQuery()) {
+            try  {
                 if (rs.next()) {
-                    System.out.println(rs.getString("name"));
-                    System.out.println(rs.getInt("age"));
+                    String name = rs.getString("Name");
+                    int age = rs.getInt("age");
+                    System.out.println(name + "\t" + age + "\t" );
                 }
-            }
-
-            catch (SQLException e) {
+            }catch (SQLException e) {
                 e.printStackTrace();
                 
             }
@@ -40,6 +41,7 @@ public class Review05 {
         } catch (SQLException e1) {
             // TODO 自動生成された catch ブロック
             e1.printStackTrace();
+            
         } finally {
          // 8. 接続を閉じる
             if (con != null) {
