@@ -12,6 +12,7 @@ public class Review05 {
     public static void main(String[] args) {
         Connection con = null;
         PreparedStatement ps = null; 
+        ResultSet rs = null;
         System.out.print("検索キーワードを入力してください > ");
         int id = keyInNum();
 
@@ -22,7 +23,7 @@ public class Review05 {
             String Sql = "SELECT name, age FROM person WHERE id = ?";
             ps = con.prepareStatement(Sql);
             ps.setInt(1, id); 
-            ResultSet rs = ps.executeQuery();
+            rs = ps.executeQuery();
         
 
             try  {
@@ -44,9 +45,9 @@ public class Review05 {
             
         } finally {
             // 8. 接続を閉じる
-            if (con != null) {
+            if (rs != null) {
                 try {
-                    con.close();
+                    rs.close();
                 } catch (SQLException e) {
                     System.err.println("ResultSetを閉じるときにエラーが発生しました。");
                     e.printStackTrace();
@@ -57,6 +58,14 @@ public class Review05 {
                     ps.close();
                 } catch (SQLException e) {
                     System.err.println("PreparedStatementを閉じるときにエラーが発生しました。");
+                    e.printStackTrace();
+                }
+            }
+            if (con != null) {
+                try {
+                    con.close();
+                } catch (SQLException e) {
+                    System.err.println("データベース切断時にエラーが発生しました。");
                     e.printStackTrace();
                 }
             }
