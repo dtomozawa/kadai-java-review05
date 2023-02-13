@@ -6,12 +6,12 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Scanner;
+
 
 public class Review05 {
     public static void main(String[] args) {
         Connection con = null;
-        PreparedStatement ps = null;    // 更新前、更新後の検索用プリペアードステートメントオブジェクト
+        PreparedStatement ps = null; 
         System.out.print("検索キーワードを入力してください > ");
         int id = keyInNum();
 
@@ -43,18 +43,26 @@ public class Review05 {
             e1.printStackTrace();
             
         } finally {
-         // 8. 接続を閉じる
+            // 8. 接続を閉じる
             if (con != null) {
                 try {
                     con.close();
                 } catch (SQLException e) {
-                    System.err.println("データベース切断時にエラーが発生しました。");
+                    System.err.println("ResultSetを閉じるときにエラーが発生しました。");
+                    e.printStackTrace();
+                }
+            }
+            if (ps != null) {
+                try {
+                    ps.close();
+                } catch (SQLException e) {
+                    System.err.println("PreparedStatementを閉じるときにエラーが発生しました。");
                     e.printStackTrace();
                 }
             }
         }
     }
-
+            
     /*
      * キーボードから入力された値をStringで返す 引数：なし 戻り値：入力された文字列
      */
